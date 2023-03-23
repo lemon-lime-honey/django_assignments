@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container text-center mt-5">
+    <form action="{% url 'assignment:catch' %}" method="GET">
+      <input type="text" placeholder="무엇이든 입력하세요" name="target" id="target">
+      <input type="submit" for="target" value="throw" class="btn btn-outline-primary">
+  </form>
+  </div>
+{% endblock content %}

@@ -1,0 +1,11 @@
+{% extends 'assignments/base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+  <h3>로또 번호 쌍의 개수를 입력하세요</h3>
+  <form action="/lotto/" method="GET">
+    <input type="number" placeholder="로또 생성 수" min="0" name="set_number" id="set_number">
+    <input type="submit" for="set_number" value="입력" class="btn btn-outline-primary">
+  </form>
+</div>
+{% endblock content %}

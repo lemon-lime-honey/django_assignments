@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container text-center mt-5 fs-1">
+    <div class="container mb-5 d-flex flex-column">
+      <h2>숫자 출력</h2>
+      <a href="{% url 'assignment:number_print' 1 %}" class="mb-3">1</a>
+      <a href="{% url 'assignment:number_print' 10 %}" class="mb-3">10</a>
+      <a href="{% url 'assignment:number_print' 20 %}" class="mb-3">20</a>
+      <a href="{% url 'assignment:number_print' 100 %}" class="mb-3">100</a>
+    </div>
+    <div class="container d-flex flex-column">
+      <h2>숫자 계산</h2>
+      <a href="{% url 'assignment:calculate' 2 1 %}" class="mb-3">2 1</a>
+      <a href="{% url 'assignment:calculate' 10 5 %}" class="mb-3">10 5</a>
+      <a href="{% url 'assignment:calculate' 8 4 %}" class="mb-3">8 4</a>
+      <a href="{% url 'assignment:calculate' 30 15 %}" class="mb-3">30 15</a>
+    </div>
+  </div>
+{% endblock content %}
