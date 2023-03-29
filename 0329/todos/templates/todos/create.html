@@ -1,0 +1,8 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container text-center mt-5">
+    <h1 class="mb-5">새로운 할 일이 등록되었습니다</h1>
+    <div><a href="{% url 'todos:index' %}" class="btn btn-outline-dark">뒤로가기</a></div>
+  </div>
+{% endblock body %}

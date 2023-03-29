@@ -1,0 +1,49 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container mt-5 text-center">
+    <h2>To-Do List</h2>
+    <br>
+    <div class="container text-start">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">제목</th>
+            <th scope="col" class="text-center">내용</th>
+            <th scope="col" class="text-center">완료</th>
+            <th scope="col" class="text-center">우선순위</th>
+            <th scope="col" class="text-center">생성일자</th>
+            <th scope="col" class="text-center">마감기한</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for element in todo %}
+            <tr>
+              <th scope="row">
+                <a href="{% url 'todos:detail' element.pk %}" class="link-secondary link-underline link-underline-opacity-0">
+                  {{ element.title }}
+                </a>
+              </th>
+              {% if element.content == None %}
+                <td class="text-center">-</td>
+              {% else %}
+                <td class="text-truncate">{{ element.content }}</td>
+              {% endif %}
+              {% if element.completed == False %}
+                <td class="text-center">-</td>
+              {% else %}
+                <td class="text-center">완료</td>
+              {% endif %}
+              <td class="text-center">{{ element.priority }}</td>
+              <td class="text-center">{{ element.created_at|date:"Y.m.d" }}</td>
+              <td class="text-center">{{ element.deadline|date:"Y.m.d" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="text-end">
+        <a href="{% url 'todos:new' %}" class="btn btn-outline-dark">추가하기</a>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

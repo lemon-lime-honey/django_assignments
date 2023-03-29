@@ -1,0 +1,42 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container text-center mt-5">
+    <h2 class="mb-3">항목 추가하기</h2>
+    <div class="card m-auto text-start" style="width: 20rem;">
+      <form action="{% url 'todos:create' %}" method="GET">
+        <div class="card-body d-flex flex-column pb-0">
+          <div class="mb-3">
+            <label for="title" class="form-label">제목</label>
+            <input type="text" name="title" id="title" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea name="content" id="content" rows="5"  class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="priority" class="form-label">우선순위</label>
+            <input type="number" value="3" name="priority" id="priority" min="0"  class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="deadline" class="form-label">마감 기한</label>
+            <input type="date" name="deadline" id="deadline"  class="form-control">
+          </div>
+          <div class="pb-0">
+            <label for="completed" class="form-label">완료 여부</label>
+            <input type="checkbox" name="completed" id="completed">
+          </div>
+        </div>
+        <hr>
+        <div class="mb-3 px-3 d-flex justify-content-between">
+          <a href="{% url 'todos:index' %}" class="btn btn-outline-dark">뒤로가기</a>
+          <input type="submit" class="btn btn-outline-success" value="등록">
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock body %}
+
+{% block script %}
+  document.getElementById("deadline").value = new Date().toISOString().substring(0, 10)
+{% endblock script %}
