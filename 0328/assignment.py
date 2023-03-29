@@ -52,7 +52,7 @@ for element in target:
 
 # 신문 Model & ORM
 # 1. pk 필드가 1인 단일 데이터의 journalist 필드 조회
-Newspaper.objects.get(pk=1)
+Newspaper.objects.get(pk=1).journalist
 
 
 # 2. journalist 필드가 Laney Mccullough인 데이터 개수 조회
