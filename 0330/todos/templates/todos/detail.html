@@ -1,0 +1,59 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container mt-5">
+    <div class="card m-auto" style="width: 30rem;">
+      <div class="card-body">
+        <h4 class="card-title text-center">{{ todo.title }}</h4>
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">내용</th>
+              <td class="text-end">{{ todo.content }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">우선순위</th>
+              <td class="text-end">{{ todo.priority }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">생성일자</th>
+              <td class="text-end">{{ todo.created_at|date:"Y.m.d" }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">마감기한</th>
+              <td class="text-end">{{ todo.deadline|date:"Y.m.d" }}</td>
+            </tr>
+            <tr class="align-middle">
+              <th scope="row" class="text-start">완료여부</th>
+              <td class="text-end d-flex justify-content-end">
+                <form action="{% url 'todos:toggle' todo.pk %}" method="GET">
+                  <input type="submit" class="btn btn-outline-dark btn-sm" id="comp" name="comp" value="변경">
+                </form>
+                <div class="ps-3 m-0 lh-lg">
+                  {% if todo.completed == True %}
+                  완료
+                  {% else %}
+                  미완
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a href="{% url 'todos:index' %}" class="btn btn-outline-primary">뒤로가기</a>
+        <div class="d-flex">
+          <form action="{% url 'todos:delete' todo.pk %}" method="POST" class="px-3">
+            {% csrf_token %}
+            <input type="submit" value="삭제" class="btn btn-outline-danger">
+          </form>
+          <form action="{% url 'todos:edit' todo.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="수정" class="btn btn-outline-success">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

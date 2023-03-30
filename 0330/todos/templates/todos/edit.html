@@ -1,0 +1,86 @@
+{% extends 'todos/base.html' %}
+
+{% block style %}
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext {
+  padding: 0rem 0.75rem;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+  height: calc(3.5rem + 8px);
+  line-height: 2;
+}
+
+.form-floating>label {
+  padding: 1rem 0.75rem;
+}
+{% endblock style %}
+
+{% block body %}
+  <div class="container text-center mt-5">
+    <div class="card m-auto" style="width: 30rem;">
+      <div class="card-header pt-3">
+        <h3>할일 수정</h3>
+      </div>
+      <div class="card-body">
+        <form action="{% url 'todos:update' todo.pk %}" method="POST" class="needs-validation" novalidate>
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="title" name="title" value="{{ todo.title }}" aria-describedby="title" required>
+            <div class="invalid-feedback text-start">제목을 입력하세요</div>
+            <label for="title">제목</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea name="content" id="content" class="form-control" style="height:10em">{{ todo.content }}</textarea>
+            <label for="content">내용</label>
+          </div>
+          <div class="d-flex">
+            <div class="form-floating mb-3 col-6">
+              <input type="number" class="form-control" id="priority" name="priority" value="{{ todo.priority }}" min="0">
+              <label for="priority">우선순위</label>
+            </div>
+            <div class="form-floating mb-3 col-6">
+              <select name="completed" id="completed" class="form-select">
+                <option value="False">미완</option>
+                <option value="True">완료</option>
+              </select>
+              <label for="completed">완료여부</label>
+            </div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="date" class="form-control" id="deadline" name="deadline" value="{{ todo.deadline|date:"Y-m-d" }}">
+            <label for="deadline">마감일</label>
+          </div>
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'todos:index' %}" class="btn btn-outline-dark">뒤로가기</a>
+            <input type="submit" class="btn btn-outline-primary" value="수정">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
+
+{% block script %}
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+{% endblock script %}
