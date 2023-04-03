@@ -1,0 +1,23 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container mt-5 text-center">
+    <h1 style="font-family: 'GmarketSansMedium';">할 일 추가</h1>
+    <div class="card mt-5 mx-auto" style="width: 24rem;">
+      <div class="card-body">
+        <form action="{% url 'todos:create' %}" method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'todos:index' %}" class="btn btn-outline-danger">뒤로가기</a>
+            <input type="submit" class="btn btn-outline-primary" value="추가">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
+
+{% block script %}
+document.querySelector("#id_deadline").value = new Date().toISOString().substring(0, 10)
+{% endblock script %}

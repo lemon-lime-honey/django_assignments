@@ -1,0 +1,59 @@
+{% extends 'todos/base.html' %}
+
+{% block body %}
+  <div class="container mt-5">
+    <div class="card m-auto" style="width: 24rem;">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-3" style="font-family: 'GmarketSansMedium;'">{{ todo.title }}</h2>
+        <hr>
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <th scope="row" class="text-start">내용</th>
+              <td class="text-end">
+                {% if todo.content == None %}
+                {% else %}
+                  {{ todo.content }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">우선순위</th>
+              <td class="text-end">{{ todo.priority }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">마감기한</th>
+              <td class="text-end">{{ todo.deadline|date:"Y.m.d" }}</td>
+            </tr>
+            <tr class="align-middle">
+              <th scope="row" class="text-start">완료여부</th>
+              <td class="text-end d-flex justify-content-end">
+                <div onclick="location.href='{% url 'todos:toggle' todo.pk %}'" style="cursor:pointer;">
+                  {% if todo.completed == True %}
+                  완료
+                  {% else %}
+                  미완
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-start">생성일자</th>
+              <td class="text-end">{{ todo.created_at|date:"Y.m.d" }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex justify-content-between bg-white">
+        <a href="{% url 'todos:index' %}" class="btn btn-outline-dark">뒤로가기</a>
+        <div class="d-flex">
+          <form action="{% url 'todos:delete' todo.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="삭제" class="btn btn-outline-danger me-2">
+          </form>
+          <a href="{% url 'todos:update' todo.pk %}" class="btn btn-outline-primary">수정</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}
