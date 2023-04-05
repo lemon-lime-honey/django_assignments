@@ -1,0 +1,19 @@
+{% extends 'accounts/base.html' %}
+
+{% block body %}
+<div class="container mt-5 w-50 m-auto">
+  <h1 class="text-center">회원가입</h1>
+  <div class="card mt-3 m-auto" style="width: 24rem;">
+    <div class="card-body">
+      <form action="{% url 'accounts:signup' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-flex justify-content-between">
+          <a href="{% url 'accounts:index' %}" class="btn btn-outline-danger">뒤로가기</a>
+          <input type="submit" class="btn btn-outline-primary" value="가입">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock body %}
