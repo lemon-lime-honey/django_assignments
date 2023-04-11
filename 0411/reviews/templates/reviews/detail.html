@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}상세보기{% endblock title %}
+{% block style %}{% endblock style %}
+{% block body %}
+<div class="container w-50">
+  <div class="d-flex align-items-center">
+    <p class="fs-6 text-end m-0 me-3">{{ review.pk }}</p>
+    <h1 class="text-center flex-grow-1">{{ review.title }}</h1>
+    <p class="fs-6 text-end m-0 ms-3">댓글: {{ comments.count }}</p>
+  </div>
+  <hr class="mt-0 mb-3">
+  <div>
+    <div class="mb-3" style="word-wrap: break-word;">
+      {% if review.image %}
+      <div class="d-flex justify-content-center">
+        <img src="{{ review.image.url }}" width="40%">
+      </div>
+      <br>
+      {% endif %}
+      {{ review.content }}
+    </div>
+    <div class="d-flex justify-content-between">
+      <a href="{% url 'reviews:index' %}" class="btn btn-outline-success">뒤로가기</a>
+      <div class="d-flex justify-content-between">
+        <a href="{% url 'reviews:update' review.pk %}" class="btn btn-outline-primary me-3">수정</a>
+        <form action="{% url 'reviews:delete' review.pk %}" method="POST">
+          {% csrf_token %}
+          <button type="sumbit" class="btn btn-outline-danger">삭제</button>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <table class="table table-borderless">
+      <tbody>
+        {% for comment in comments %}
+        <tr>
+          <td class="align-middle" style="width: 90%;">{{ comment.content }}</td>
+          <td>
+            <form action="{% url 'reviews:comment_delete' review.pk comment.pk %}" method="POST">
+              {% csrf_token %}
+              <input type="submit" class="btn btn-sm btn-dark" value="삭제">
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td>
+            아직 댓글이 존재하지 않습니다
+          </td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <form action="{% url 'reviews:comment_create' review.pk %}" method="POST">
+            {% csrf_token %}
+            <td style="width: 90%">
+              {{ form.content }}
+            </td>
+            <td>
+              <input type="submit" class="btn btn-sm btn-outline-dark" value="등록">
+            </td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock body %}
+{% block script %}
+const comment_content = document.getElementById('id_content')
+comment_content.style.width = '100%'
+{% endblock script %}

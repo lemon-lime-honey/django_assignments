@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}REVIEW{% endblock title %}
+{% block style %}{% endblock style %}
+{% block body %}
+<div class="container text-center">
+  <table class="table table-hover w-75 m-auto">
+    <thead>
+      <tr>
+        <th scope="col" style="width: 5%;">#</th>
+        <th scope="col" style="width: 20%;">영화</th>
+        <th scope="col">제목</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews %}
+      <tr>
+        <th scope="row">{{ review.pk }}</th>
+        <td class="text-truncate">{{ review.movie }}</td>
+        <td onclick="location.href='{% url 'reviews:detail' review.pk %}'" style="cursor: pointer;" class="text-truncate text-start">{{ review.title }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock body %}
+{% block script %}{% endblock script %}
