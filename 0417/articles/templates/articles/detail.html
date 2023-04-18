@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block style %}{% endblock style %}
+{% block body %}
+<div class="container">
+  <h2 class="text-center">{{ article.title }}</h2>
+  <div class="d-flex justify-content-between">
+    <div class="fs-6">
+      <span onclick="location.href='{% url 'accounts:profile' article.user.pk %}'" style="cursor: pointer;">{{ article.user }}</span><br>
+      {{ article.created_at }}
+    </div>
+    <div>
+      <span>댓글 {{ comments.count }}</span><br>
+      <form action="{% url 'articles:recommend' article.pk %}">
+        {% csrf_token %}
+        {% if request.user in article.recommend.all %}
+          <input type="submit" value="&heartsuit; {{ article.recommend.count }}" class="btn">
+        {% else %}
+          <input type="submit" value="&#9825; {{ article.recommend.count }}" class="btn" >
+        {% endif %}
+      </form>
+    </div>
+  </div>
+  <hr>
+  <div class="container fs-3">
+    {{ article.content|linebreaks }}
+  </div>
+  <hr>
+  <div class="d-flex justify-content-center">
+    {% for emotion in emotions %}
+    <div class="mx-1 text-center">
+      {% if request.user.is_authenticated %}
+      {{ emotion.queryset }}
+        <form action="{% url 'articles:emotes' article.pk emotion.value %}" method="POST">
+          {% csrf_token %}
+          {% if emotion.exist %}
+            <input type="submit" value="{{ emotion.label }}" class="btn btn-sm btn-outline-dark">
+          {% else %}
+            <input type="submit" value="{{ emotion.label }}" class="btn btn-sm">
+          {% endif %}
+        </form>
+      {% else %}
+        <button disabled="disabled">{{ emotion.label }}</button>
+      {% endif %}
+      <p class="text-center">
+        {% if emotion.value == 1 %}
+        좋아요<br>
+        {% elif emotion.value == 2 %}
+        재밌어요<br>
+        {% elif emotion.value == 3 %}
+        화나요<br>
+        {% elif emotion.value == 4 %}
+        슬퍼요<br>
+        {% endif %}
+        {{ emotion.count }}
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+  <hr>
+  <div class="container">
+    <p>댓글</p>
+    <hr class="mb-0">
+    <table class="table">
+      <tbody>
+      {% for comment in comments %}
+        <tr>
+          <td style="width: 10%;">
+            <div class="fs-6">
+              {{ comment.user }}<br>
+              {{ comment.updated_at|date:"Y-m-d" }}
+            </div>
+          </td>
+          <td {% if request.user != comment.user %}colspan="2"{% endif %} class="fs-5 align-middle" style="width: 80%">
+            <div class="d-flex justify-content-between">
+              <div>{{ comment.content }}</div>
+              <form action="{% url 'articles:comment_like' article.pk comment.pk %}">
+                {% csrf_token %}
+                {% if request.user in comment.like_users.all %}
+                  <input type="submit" value="&heartsuit; {{ comment.like_users.count }}" class="btn">
+                {% else %}
+                  <input type="submit" value="&#9825; {{ comment.like_users.count }}" class="btn" >
+                {% endif %}
+              </form>
+            </div>
+          </td>
+          {% if request.user == comment.user %}
+          <td class="align-middle" style="width: 5%;">
+            <form action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST" style="width: 40px;>
+              {% csrf_token %}
+              <input type="submit" class="btn btn-sm btn-dark" value="삭제">
+            </form>
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <table class="table table-borderless">
+      <tr>
+        {% if request.user.is_authenticated %}
+          <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+            {% csrf_token %}
+            <td style="width: 100%">
+              {{ comment_form.content }}
+            </td>
+            <td>
+              <input type="submit" class="btn btn-sm btn-outline-dark" value="등록">
+            </td>
+          </form>
+        {% else %}
+          <td class="text-center" colspan="2">댓글을 작성할 권한이 없습니다</td>
+        {% endif %}
+        </tr>
+    </table>
+  </div>
+  {% if request.user == article.user %}
+  <div class="d-flex justify-content-between">
+    <div>
+      <a href="{% url 'articles:index' %}" class="btn btn-sm btn-outline-dark me-2">목록</a>
+      <a href="{% url 'articles:create' %}" class="btn btn-sm btn-outline-danger">글쓰기</a>
+    </div>
+  </div>
+  {% else %}
+  <div class="text-start">
+    <a href="{% url 'articles:index' %}" class="btn btn-sm btn-outline-dark me-2">목록</a>
+    <a href="{% url 'articles:create' %}" class="btn btn-sm btn-outline-danger">글쓰기</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock body %}
+{% block script %}
+const comment_content = document.getElementById('id_content')
+comment_content.style.width = '100%'
+{% endblock script %}

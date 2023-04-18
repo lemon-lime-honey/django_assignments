@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}게시글 작성{% endblock title %}
+{% block style %}
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext {
+  padding: 0rem 0.75rem;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+  height: calc(3.5rem + 8px);
+  line-height: 2;
+}
+
+.form-floating>label {
+  padding: 1rem 0.75rem;
+}
+{% endblock style %}
+{% block body %}
+<div class="container w-50">
+  <h2 class="my-3 text-center">게시글 작성하기</h2>
+  <form action="{% url 'articles:create' %}" method="POST">
+    {% csrf_token %}
+    <div class="form-floating mb-3">
+      {{ form.title }}
+      <label for="{{ form.title.id_for_label }}">제목</label>
+    </div>
+    <div class="form-floating mb-3">
+      {{ form.content }}
+      <label for="{{ form.content.id_for_label }}">내용</label>
+    </div>
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'articles:index' %}" class="btn btn-outline-danger">뒤로가기</a>
+        <input type="submit" value="업로드" class="btn btn-outline-primary">
+    </div>
+  </form>
+</div>
+{% endblock body %}
+{% block script %}
+{% endblock script %}

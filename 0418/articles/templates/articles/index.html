@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block style %}
+  .pagination > .active > a, 
+  .my.pagination > .active > span, 
+  .my.pagination > .active > a:hover, 
+  .my.pagination > .active > span:hover, 
+  .my.pagination > .active > a:focus, 
+  .my.pagination > .active > span:focus {
+    background: #000000;
+    border-color: #000000;
+  }
+{% endblock style %}
+{% block body %}
+<table class="table table-hover w-75 m-auto">
+  <thead>
+    <tr>
+      <th scope="col" class="text-center" style="width: 5%;">#</th>
+      <th scope="col" class="text-center" style="width: 10%;">좋아요</th>
+      <th scope="col" class="text-center">제목</th>
+      <th scope="col" class="text-center" style="width: 20%;">작성자</th>
+      <th scope="col" class="text-center" style="width: 20%;">작성일</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr>
+      <th scope="row" class="text-center">{{ article.pk }}</th>
+      <td class="text-center">{{ article.like_users.count }}</td>
+      <td onclick="location.href='{% url 'articles:detail' article.pk %}'" style="cursor: pointer;">{{ article.title }}</td>
+      <td class="text-center" onclick="location.href='{% url 'accounts:profile' article.user %}'" style="cursor: pointer;">{{ article.user }}</td>
+      <td class="text-center">{{ article.created_at|date:'Y-m-d'}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<ul class="pagination justify-content-center mt-3">
+  {% if articles.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page=1">처음</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ articles.previous_page_number }}">이전</a>
+    </li>
+  {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="?page=1">처음</a>
+    </li>
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+    </li>
+  {% endif %}
+  {% for page_number in articles.paginator.page_range %}
+    {% if page_number >= articles.number|add:-5 and page_number <= articles.number|add:5 %}
+      {% if page_number == articles.number %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+        </li>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+  {% if articles.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ articles.next_page_number }}">다음</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_total }}">마지막</a>
+    </li>
+  {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+    </li>
+    <li class="page-item disabled">
+      <a class="page-link" href="?page={{ page_total }}">마지막</a>
+    </li>
+  {% endif %}
+</ul>
+{% endblock body %}
+{% block script %}{% endblock script %}

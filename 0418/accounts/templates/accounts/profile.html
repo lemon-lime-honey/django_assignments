@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}회원정보{% endblock title %}
+{% block style %}
+.btn {
+  border: 0;
+}
+{% endblock style %}
+{% block body %}
+<div class="card m-auto" style="width: 30rem;">
+  <div class=" card-header d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <h2 class="text-center me-1">{{ person }}</h2>
+      {% if request.user != person %}
+      <div class="d-flex align-items-center">
+        <form action="{% url 'accounts:follow' person.pk %}" method="POST">
+          {% csrf_token %}
+          {% if request.user in person.followers.all %}
+            <input type="submit" value="Unfollow" class="btn btn-sm" {% if not request.user.is_authenticated %}disabled{% endif %}>
+          {% else %}
+            <input type="submit" value="Follow" class="btn btn-sm" {% if not request.user.is_authenticated %}disabled{% endif %}>
+          {% endif %}
+        </form>
+      </div>
+      {% endif %}
+    </div>
+    <table class="table text-center table-sm table-borderless m-0" style="font-size: 10pt; width: 20%;">
+      <thead>
+        <th scope="col">팔로잉</th>
+        <th scope="col">팔로워</th>
+      </thead>
+      <tbody>
+        <td>{{ person.following.all|length }}</td>
+        <td>{{ person.followers.all|length }}</td>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-body">
+    <ul class="nav nav-tabs" id="follow" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="following-tab" data-bs-toggle="tab" data-bs-target="#following" type="button" role="tab">팔로잉</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="follower-tab" data-bs-toggle="tab" data-bs-target="#follower" type="button" role="tab">팔로우</button>
+      </li>
+    </ul>
+    <div class="tab-content m-3" id="follow-list">
+      <div class="tab-pane active" id="following" role="tabpanel" tabindex="0">
+        {% for name in following %}
+        {{ name }}<br>
+        {% endfor %}
+      </div>
+      <div class="tab-pane" id="follower" role="tabpanel" tabindex="0">
+        {% for name in follower %}
+        {{ name }}<br>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+{% block script %}{% endblock script %}

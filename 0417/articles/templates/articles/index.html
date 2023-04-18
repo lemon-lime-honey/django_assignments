@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block style %}{% endblock style %}
+{% block body %}
+<table class="table table-hover w-75 m-auto">
+  <thead>
+    <tr>
+      <th scope="col" class="text-center" style="width: 5%;">#</th>
+      <th scope="col" class="text-center" style="width: 10%;">추천</th>
+      <th scope="col" class="text-center">제목</th>
+      <th scope="col" class="text-center" style="width: 20%;">작성자</th>
+      <th scope="col" class="text-center" style="width: 20%;">작성일</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr>
+      <th scope="row" class="text-center">{{ article.pk }}</th>
+      <td class="text-center">{{ article.recommend.count }}</td>
+      <td onclick="location.href='{% url 'articles:detail' article.pk %}'" style="cursor: pointer;">{{ article.title }}</td>
+      <td class="text-center" onclick="location.href='{% url 'accounts:profile' article.user.pk %}'" style="cursor: pointer;">{{ article.user }}</td>
+      <td class="text-center">{{ article.created_at|date:'Y-m-d'}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock body %}
+{% block script %}{% endblock script %}
